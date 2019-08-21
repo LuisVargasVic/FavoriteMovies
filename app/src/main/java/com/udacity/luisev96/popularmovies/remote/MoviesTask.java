@@ -6,7 +6,6 @@ import com.udacity.luisev96.popularmovies.database.DatabaseMovie;
 import com.udacity.luisev96.popularmovies.database.MoviesDatabase;
 import com.udacity.luisev96.popularmovies.domain.Movie;
 import com.udacity.luisev96.popularmovies.presentation.MoviesListener;
-import com.udacity.luisev96.popularmovies.utils.AppExecutors;
 import com.udacity.luisev96.popularmovies.utils.JsonUtils;
 
 import java.io.BufferedInputStream;
@@ -45,6 +44,26 @@ public class MoviesTask extends AsyncTask<URL, Void, String> {
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                 result = reader.readLine();
+                List<Movie> movies = JsonUtils.parseMovieJson(result);
+                for (int i = 0; i < movies.size(); i++) {
+                    Movie movie = movies.get(i);
+                    final DatabaseMovie databaseMovie = new DatabaseMovie(
+                            movie.getId(),
+                            movie.getVoteCount(),
+                            movie.isVideo(),
+                            movie.getVoteAverage(),
+                            movie.getTitle(),
+                            movie.getPopularity(),
+                            movie.getPosterPath(),
+                            movie.getOriginalLanguage(),
+                            movie.getOriginalTitle(),
+                            movie.getBackdropPath(),
+                            movie.isAdult(),
+                            movie.getOverview(),
+                            movie.getReleaseDate()
+                    );
+                    mMoviesDatabase.moviesDao().insert(databaseMovie);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -60,31 +79,6 @@ public class MoviesTask extends AsyncTask<URL, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         if (result != null) {
-            List<Movie> movies = JsonUtils.parseMovieJson(result);
-            for (int i = 0; i < movies.size(); i++) {
-                Movie movie = movies.get(i);
-                final DatabaseMovie databaseMovie = new DatabaseMovie(
-                        movie.getId(),
-                        movie.getVoteCount(),
-                        movie.isVideo(),
-                        movie.getVoteAverage(),
-                        movie.getTitle(),
-                        movie.getPopularity(),
-                        movie.getPosterPath(),
-                        movie.getOriginalLanguage(),
-                        movie.getOriginalTitle(),
-                        movie.getBackdropPath(),
-                        movie.isAdult(),
-                        movie.getOverview(),
-                        movie.getReleaseDate()
-                );
-                AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        mMoviesDatabase.moviesDao().insert(databaseMovie);
-                    }
-                });
-            }
             mMoviesListener.postExecute(true);
         } else {
             mMoviesListener.postExecute(false);

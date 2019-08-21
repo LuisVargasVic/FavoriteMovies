@@ -131,7 +131,6 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.M
         if (isData) {
             activityMainBinding.network.setVisibility(View.GONE);
             activityMainBinding.rvMoviesList.setVisibility(View.VISIBLE);
-
         } else {
             activityMainBinding.rvMoviesList.setVisibility(View.GONE);
             activityMainBinding.network.setVisibility(View.VISIBLE);
