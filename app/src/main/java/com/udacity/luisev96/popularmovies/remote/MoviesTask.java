@@ -3,10 +3,11 @@ package com.udacity.luisev96.popularmovies.remote;
 import android.os.AsyncTask;
 
 import com.udacity.luisev96.popularmovies.database.DatabaseMovie;
-import com.udacity.luisev96.popularmovies.utils.JsonUtils;
-import com.udacity.luisev96.popularmovies.domain.Movie;
 import com.udacity.luisev96.popularmovies.database.MoviesDatabase;
+import com.udacity.luisev96.popularmovies.domain.Movie;
+import com.udacity.luisev96.popularmovies.presentation.MoviesListener;
 import com.udacity.luisev96.popularmovies.utils.AppExecutors;
+import com.udacity.luisev96.popularmovies.utils.JsonUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -20,14 +21,17 @@ import java.util.List;
 public class MoviesTask extends AsyncTask<URL, Void, String> {
 
     private MoviesDatabase mMoviesDatabase;
+    private MoviesListener mMoviesListener;
 
-    public MoviesTask(MoviesDatabase moviesDatabase) {
+    public MoviesTask(MoviesDatabase moviesDatabase, MoviesListener moviesListener) {
         mMoviesDatabase = moviesDatabase;
+        mMoviesListener = moviesListener;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        mMoviesListener.preExecute();
     }
 
     @Override
@@ -81,6 +85,9 @@ public class MoviesTask extends AsyncTask<URL, Void, String> {
                     }
                 });
             }
+            mMoviesListener.postExecute(true);
+        } else {
+            mMoviesListener.postExecute(false);
         }
     }
 }

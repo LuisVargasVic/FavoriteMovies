@@ -1,6 +1,5 @@
 package com.udacity.luisev96.popularmovies.presentation;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,17 +19,12 @@ import com.udacity.luisev96.popularmovies.R;
 import com.udacity.luisev96.popularmovies.databinding.ActivityMainBinding;
 import com.udacity.luisev96.popularmovies.domain.Movie;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements MoviesAdapter.MovieClickListener {
+public class MainActivity extends AppCompatActivity implements MoviesAdapter.MovieClickListener, MoviesListener {
 
     private ActivityMainBinding activityMainBinding;
     MoviesAdapter mAdapter;
@@ -40,8 +34,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final String TYPE_SELECTED = "type_selected";
     public static final String MOVIE = "movie";
-    public static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
-    public static final String API_KEY = "?api_key=YOUR_API_KEY";
     public static final String SORT_POPULAR = "popular";
     public static final String SORT_TOP = "top_rated";
 
@@ -63,11 +55,28 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
                 Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
+                assert movies != null;
+                if (typeSelected.equals(SORT_POPULAR)) {
+                    Collections.sort(movies, new Comparator<Movie>() {
+                        @Override
+                        public int compare(Movie c1, Movie c2) {
+                            return Double.compare(c2.getPopularity(), c1.getPopularity());
+                        }
+                    });
+                } else {
+                    Collections.sort(movies, new Comparator<Movie>() {
+                        @Override
+                        public int compare(Movie c1, Movie c2) {
+                            return Double.compare(c2.getVoteAverage(), c1.getVoteAverage());
+                        }
+                    });
+                }
                 mAdapter.setMovies(movies);
             }
         });
         if (savedInstanceState != null) {
             typeSelected = savedInstanceState.getString(TYPE_SELECTED);
+            assert typeSelected != null;
             populateUI(typeSelected);
         } else {
             populateUI(SORT_POPULAR);
@@ -76,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
 
     public void populateUI(String sort) {
         typeSelected = sort;
-        viewModel.refresh(typeSelected);
+        viewModel.refresh(typeSelected, this);
         if (sort.equals(SORT_POPULAR)) {
             Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.popular);
         } else {
@@ -109,56 +118,23 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
         return super.onOptionsItemSelected(item);
     }
 
-    public class PopularMoviesTask extends AsyncTask<URL, Void, String> {
+    @Override
+    public void preExecute() {
+        activityMainBinding.pb.setVisibility(View.VISIBLE);
+        activityMainBinding.network.setVisibility(View.GONE);
+        activityMainBinding.rvMoviesList.setVisibility(View.GONE);
+    }
 
-        MoviesAdapter.MovieClickListener mMovieClickListener;
-
-        public PopularMoviesTask(MoviesAdapter.MovieClickListener movieClickListener) {
-            mMovieClickListener = movieClickListener;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            activityMainBinding.pb.setVisibility(View.VISIBLE);
+    @Override
+    public void postExecute(Boolean isData) {
+        activityMainBinding.pb.setVisibility(View.GONE);
+        if (isData) {
             activityMainBinding.network.setVisibility(View.GONE);
+            activityMainBinding.rvMoviesList.setVisibility(View.VISIBLE);
+
+        } else {
             activityMainBinding.rvMoviesList.setVisibility(View.GONE);
-        }
-
-        @Override
-        protected String doInBackground(URL... params) {
-            URL url = params[0];
-            String result = null;
-            HttpURLConnection urlConnection;
-            try {
-                urlConnection = (HttpURLConnection) url.openConnection();
-                try {
-                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                    result = reader.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    urlConnection.disconnect();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            activityMainBinding.pb.setVisibility(View.GONE);
-            if (result != null) {
-                activityMainBinding.network.setVisibility(View.GONE);
-                activityMainBinding.rvMoviesList.setVisibility(View.VISIBLE);
-
-            } else {
-                activityMainBinding.rvMoviesList.setVisibility(View.GONE);
-                activityMainBinding.network.setVisibility(View.VISIBLE);
-            }
+            activityMainBinding.network.setVisibility(View.VISIBLE);
         }
     }
 

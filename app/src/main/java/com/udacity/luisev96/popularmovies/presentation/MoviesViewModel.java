@@ -26,9 +26,9 @@ public class MoviesViewModel extends AndroidViewModel {
         movies = repository.getMovies();
     }
 
-    public void refresh(String typeSelected) {
+    public void refresh(String typeSelected, MoviesListener moviesListener) {
         repository.setTypeSelected(typeSelected);
-        repository.refresh();
+        repository.refresh(moviesListener);
     }
 
     public LiveData<List<Movie>> getMovies() {
