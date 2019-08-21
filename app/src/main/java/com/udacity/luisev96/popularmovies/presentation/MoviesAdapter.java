@@ -1,4 +1,4 @@
-package com.udacity.luisev96.popularmovies;
+package com.udacity.luisev96.popularmovies.presentation;
 
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -10,8 +10,11 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
+import com.udacity.luisev96.popularmovies.R;
 import com.udacity.luisev96.popularmovies.databinding.MovieItemBinding;
+import com.udacity.luisev96.popularmovies.domain.Movie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +23,7 @@ import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
 
-    private List<Movie> mMoviesList;
+    private List<Movie> mMoviesList = new ArrayList<>();
     private MovieClickListener mMovieClickListener;
     private static final String BASE_URL = "https://image.tmdb.org/t/p/w185";
 
@@ -28,9 +31,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         void movieClicked(Movie movie);
     }
 
-    public MoviesAdapter(List<Movie> moviesList, MovieClickListener movieClickListener) {
-        mMoviesList = moviesList;
+    public MoviesAdapter(MovieClickListener movieClickListener) {
         mMovieClickListener = movieClickListener;
+    }
+
+    public void setMovies(List<Movie> mMoviesList) {
+        this.mMoviesList = mMoviesList;
+        notifyDataSetChanged();
     }
 
     @NonNull

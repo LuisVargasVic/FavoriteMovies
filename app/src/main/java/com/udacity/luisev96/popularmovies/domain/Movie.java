@@ -1,7 +1,6 @@
-package com.udacity.luisev96.popularmovies;
+package com.udacity.luisev96.popularmovies.domain;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by Luis Vargas on 2019-08-20.
@@ -18,13 +17,12 @@ public class Movie implements Serializable {
     private String posterPath;
     private String originalLanguage;
     private String originalTitle;
-    private List<Integer> genreIds;
     private String backdropPath;
     private boolean adult;
     private String overview;
     private String releaseDate;
 
-    public Movie(int id, int voteCount, boolean video, double voteAverage, String title, double popularity, String posterPath, String originalLanguage, String originalTitle, List<Integer> genreIds, String backdropPath, boolean adult, String overview, String releaseDate) {
+    public Movie(int id, int voteCount, boolean video, double voteAverage, String title, double popularity, String posterPath, String originalLanguage, String originalTitle, String backdropPath, boolean adult, String overview, String releaseDate) {
         this.id = id;
         this.voteCount = voteCount;
         this.video = video;
@@ -34,7 +32,6 @@ public class Movie implements Serializable {
         this.posterPath = posterPath;
         this.originalLanguage = originalLanguage;
         this.originalTitle = originalTitle;
-        this.genreIds = genreIds;
         this.backdropPath = backdropPath;
         this.adult = adult;
         this.overview = overview;
@@ -75,10 +72,6 @@ public class Movie implements Serializable {
 
     public String getOriginalTitle() {
         return originalTitle;
-    }
-
-    public List<Integer> getGenreIds() {
-        return genreIds;
     }
 
     public String getBackdropPath() {
