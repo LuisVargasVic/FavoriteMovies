@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.udacity.luisev96.popularmovies.R;
-import com.udacity.luisev96.popularmovies.databinding.ActivityMainBinding;
+import com.udacity.luisev96.popularmovies.databinding.ActivityMoviesBinding;
 import com.udacity.luisev96.popularmovies.domain.Movie;
 
 import java.util.Collections;
@@ -24,14 +24,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements MoviesAdapter.MovieClickListener, MoviesListener {
+public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.MovieClickListener, MoviesListener {
 
-    private ActivityMainBinding activityMainBinding;
+    private ActivityMoviesBinding activityMainBinding;
     MoviesAdapter mAdapter;
     MoviesViewModel viewModel;
     private String typeSelected;
     MoviesAdapter.MovieClickListener mMovieClickListener;
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MoviesActivity.class.getSimpleName();
     public static final String TYPE_SELECTED = "type_selected";
     public static final String MOVIE = "movie";
     public static final String SORT_POPULAR = "popular";
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Mov
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_movies);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
