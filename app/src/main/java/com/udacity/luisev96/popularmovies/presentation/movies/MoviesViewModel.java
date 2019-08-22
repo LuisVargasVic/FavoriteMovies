@@ -1,4 +1,4 @@
-package com.udacity.luisev96.popularmovies.presentation;
+package com.udacity.luisev96.popularmovies.presentation.movies;
 
 import android.app.Application;
 import android.util.Log;
@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.udacity.luisev96.popularmovies.data.MoviesRepository;
 import com.udacity.luisev96.popularmovies.database.MoviesDatabase;
 import com.udacity.luisev96.popularmovies.domain.Movie;
+import com.udacity.luisev96.popularmovies.remote.RemoteListener;
 
 import java.util.List;
 
@@ -26,9 +27,9 @@ public class MoviesViewModel extends AndroidViewModel {
         movies = repository.getMovies();
     }
 
-    public void refresh(String typeSelected, MoviesListener moviesListener) {
+    public void refresh(String typeSelected, RemoteListener remoteListener) {
         repository.setTypeSelected(typeSelected);
-        repository.refresh(moviesListener);
+        repository.refresh(remoteListener);
     }
 
     public LiveData<List<Movie>> getMovies() {

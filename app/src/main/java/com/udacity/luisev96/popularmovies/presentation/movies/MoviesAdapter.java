@@ -1,4 +1,4 @@
-package com.udacity.luisev96.popularmovies.presentation;
+package com.udacity.luisev96.popularmovies.presentation.movies;
 
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -31,7 +31,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         void movieClicked(Movie movie);
     }
 
-    public MoviesAdapter(MovieClickListener movieClickListener) {
+    MoviesAdapter(MovieClickListener movieClickListener) {
         mMovieClickListener = movieClickListener;
     }
 
@@ -44,8 +44,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     @Override
     public MoviesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         MovieItemBinding movieItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.movie_item, parent, false);
-        MoviesViewHolder viewHolder = new MoviesViewHolder(movieItemBinding);
-        return viewHolder;
+        return new MoviesViewHolder(movieItemBinding);
     }
 
     @Override
@@ -63,7 +62,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         MovieItemBinding mMovieItemBinding;
         Movie mMovie;
 
-        public MoviesViewHolder(@NonNull MovieItemBinding movieItemBinding) {
+        MoviesViewHolder(@NonNull MovieItemBinding movieItemBinding) {
             super(movieItemBinding.getRoot());
             mMovieItemBinding = movieItemBinding;
             itemView.setOnClickListener(this);

@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import com.udacity.luisev96.popularmovies.database.DatabaseMovie;
 import com.udacity.luisev96.popularmovies.database.MoviesDatabase;
 import com.udacity.luisev96.popularmovies.domain.Movie;
-import com.udacity.luisev96.popularmovies.presentation.MoviesListener;
 import com.udacity.luisev96.popularmovies.utils.JsonUtils;
 
 import java.io.BufferedInputStream;
@@ -20,17 +19,17 @@ import java.util.List;
 public class MoviesTask extends AsyncTask<URL, Void, String> {
 
     private MoviesDatabase mMoviesDatabase;
-    private MoviesListener mMoviesListener;
+    private RemoteListener mRemoteListener;
 
-    public MoviesTask(MoviesDatabase moviesDatabase, MoviesListener moviesListener) {
+    public MoviesTask(MoviesDatabase moviesDatabase, RemoteListener remoteListener) {
         mMoviesDatabase = moviesDatabase;
-        mMoviesListener = moviesListener;
+        mRemoteListener = remoteListener;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mMoviesListener.preExecute();
+        mRemoteListener.preExecute();
     }
 
     @Override
@@ -79,9 +78,9 @@ public class MoviesTask extends AsyncTask<URL, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         if (result != null) {
-            mMoviesListener.postExecute(true);
+            mRemoteListener.postExecute(true);
         } else {
-            mMoviesListener.postExecute(false);
+            mRemoteListener.postExecute(false);
         }
     }
 }

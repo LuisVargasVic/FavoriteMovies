@@ -6,4 +6,16 @@
     <string name="movie">Movie</string>
     <string name="action_popular">Popular Movies</string>
     <string name="action_top">Top Rated Movies</string>
+    <string name="average_vote">Average vote:</string>
+    <string name="release_date">Release date:</string>
+    <string name="first_air_date">First air date:</string>
+    <string name="vote_count">Votes:</string>
+    <string name="popularity">Popularity:</string>
+    <string name="original_language">Original Language:</string>
+    <string name="overview">Overview:</string>
+    <string name="synopsis">Synopsis</string>
+    <string name="videos">Videos</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
