@@ -16,4 +16,10 @@ public interface MoviesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(DatabaseMovie movie);
+
+    @Query("SELECT * FROM DatabaseVideo WHERE typeId = :movieId")
+    LiveData<List<DatabaseVideo>> getVideos(int movieId);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertVideo(DatabaseVideo video);
 }

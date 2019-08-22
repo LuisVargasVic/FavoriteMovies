@@ -1,6 +1,7 @@
 package com.udacity.luisev96.popularmovies.utils;
 
 import com.udacity.luisev96.popularmovies.domain.Movie;
+import com.udacity.luisev96.popularmovies.domain.Video;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +26,11 @@ public class JsonUtils {
     private static final String KEY_ADULT = "adult";
     private static final String KEY_OVERVIEW = "overview";
     private static final String KEY_RELEASE_DATE = "release_date";
+    private static final String KEY_KEY = "key";
+    private static final String KEY_NAME = "name";
+    private static final String KEY_SITE = "site";
+    private static final String KEY_SIZE = "size";
+    private static final String KEY_TYPE = "type";
 
     public static  List<Movie> parseMovieJson(String json) {
         List<Movie> movies = new ArrayList<>();
@@ -52,5 +58,26 @@ public class JsonUtils {
             e.printStackTrace();
         }
         return movies;
+    }
+
+    public static  List<Video> parseVideoJson(String json) {
+        List<Video> videos = new ArrayList<>();
+        try {
+            JSONObject object = new JSONObject(json);
+            JSONArray results = object.getJSONArray(KEY_RESULTS);
+            for (int i = 0; i < results.length(); i++) {
+                JSONObject video = results.getJSONObject(i);
+                String id = video.getString(KEY_ID);
+                String key = video.getString(KEY_KEY);
+                String name = video.getString(KEY_NAME);
+                String site = video.getString(KEY_SITE);
+                int size = video.getInt(KEY_SIZE);
+                String type = video.getString(KEY_TYPE);
+                videos.add(new Video(id, key, name, site, size, type));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return videos;
     }
 }
