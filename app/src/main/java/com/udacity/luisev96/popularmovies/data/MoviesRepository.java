@@ -7,8 +7,8 @@ import androidx.lifecycle.Transformations;
 import com.udacity.luisev96.popularmovies.database.DatabaseMovie;
 import com.udacity.luisev96.popularmovies.database.MoviesDatabase;
 import com.udacity.luisev96.popularmovies.domain.Movie;
-import com.udacity.luisev96.popularmovies.presentation.MoviesListener;
 import com.udacity.luisev96.popularmovies.remote.MoviesTask;
+import com.udacity.luisev96.popularmovies.remote.RemoteListener;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,7 +32,7 @@ public class MoviesRepository {
         this.typeSelected = typeSelected;
     }
 
-    public void refresh(MoviesListener moviesListener) {
+    public void refresh(RemoteListener remoteListener) {
         URL url = null;
         try {
             url = new URL(BASE_URL + typeSelected + API_KEY);
@@ -40,7 +40,7 @@ public class MoviesRepository {
             e.printStackTrace();
         }
         final URL finalUrl = url;
-        new MoviesTask(mMoviesDatabase, moviesListener).execute(finalUrl);
+        new MoviesTask(mMoviesDatabase, remoteListener).execute(finalUrl);
     }
 
     public LiveData<List<Movie>> getMovies() {
