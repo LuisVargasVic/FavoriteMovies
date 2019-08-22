@@ -72,8 +72,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
         @Override
         public void onClick(View view) {
-            /*Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra(MOVIE, movie);
+            /*Intent intent = new Intent(mContext, VideoActivity.class);
+            intent.putExtra(VIDEO, mVideo);
             startActivity(intent);*/
         }
     }

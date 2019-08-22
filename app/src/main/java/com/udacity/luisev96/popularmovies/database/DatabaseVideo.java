@@ -8,7 +8,8 @@ import androidx.room.PrimaryKey;
 public class DatabaseVideo {
 
     @PrimaryKey
-    @NonNull private String id;
+    @NonNull
+    private String id;
     private int typeId;
     private String key;
     private String name;
@@ -16,7 +17,7 @@ public class DatabaseVideo {
     private int size;
     private String type;
 
-    public DatabaseVideo(String id, String key, String name, String site, int size, String type, int typeId) {
+    public DatabaseVideo(@NonNull String id, String key, String name, String site, int size, String type, int typeId) {
         this.id = id;
         this.key = key;
         this.name = name;

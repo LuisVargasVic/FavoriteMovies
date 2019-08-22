@@ -22,4 +22,10 @@ public interface MoviesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertVideo(DatabaseVideo video);
+
+    @Query("SELECT * FROM DatabaseReview WHERE typeId = :movieId")
+    LiveData<List<DatabaseReview>> getReviews(int movieId);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertReview(DatabaseReview review);
 }

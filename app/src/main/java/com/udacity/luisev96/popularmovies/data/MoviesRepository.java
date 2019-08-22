@@ -5,12 +5,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
 import com.udacity.luisev96.popularmovies.database.DatabaseMovie;
+import com.udacity.luisev96.popularmovies.database.DatabaseReview;
 import com.udacity.luisev96.popularmovies.database.DatabaseVideo;
 import com.udacity.luisev96.popularmovies.database.MoviesDatabase;
 import com.udacity.luisev96.popularmovies.domain.Movie;
+import com.udacity.luisev96.popularmovies.domain.Review;
 import com.udacity.luisev96.popularmovies.domain.Video;
 import com.udacity.luisev96.popularmovies.remote.MoviesTask;
 import com.udacity.luisev96.popularmovies.remote.RemoteListener;
+import com.udacity.luisev96.popularmovies.remote.ReviewsTask;
 import com.udacity.luisev96.popularmovies.remote.VideosTask;
 
 import java.net.MalformedURLException;
@@ -25,6 +28,7 @@ public class MoviesRepository {
     private static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
     private static final String API_KEY = "?api_key=YOUR_API_KEY";
     private static final String VIDEOS = "/videos";
+    private static final String REVIEWS = "/reviews";
 
     private String typeSelected;
 
@@ -112,6 +116,41 @@ public class MoviesRepository {
                         }
 
                         return videos;
+                    }
+                });
+    }
+
+    public void reviews(int movieId, RemoteListener remoteListener) {
+        URL url = null;
+        try {
+            url = new URL(BASE_URL + movieId + REVIEWS + API_KEY);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        final URL finalUrl = url;
+        new ReviewsTask(movieId, mMoviesDatabase, remoteListener).execute(finalUrl);
+    }
+
+
+    public LiveData<List<Review>> getReviews(final Integer movieId) {
+        return Transformations.map(mMoviesDatabase.moviesDao().getReviews(movieId),
+                new Function<List<DatabaseReview>, List<Review>>() {
+                    @Override
+                    public List<Review> apply(List<DatabaseReview> databaseReviews) {
+                        List<Review> reviews = new ArrayList<>();
+
+                        for (int i = 0; i < databaseReviews.size(); i++) {
+                            DatabaseReview databaseReview = databaseReviews.get(i);
+                            reviews.add(new Review(
+                                            databaseReview.getId(),
+                                            databaseReview.getAuthor(),
+                                            databaseReview.getContent(),
+                                            databaseReview.getUrl()
+                                    )
+                            );
+                        }
+
+                        return reviews;
                     }
                 });
     }

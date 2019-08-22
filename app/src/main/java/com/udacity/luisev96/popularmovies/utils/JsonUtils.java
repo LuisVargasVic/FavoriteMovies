@@ -1,6 +1,7 @@
 package com.udacity.luisev96.popularmovies.utils;
 
 import com.udacity.luisev96.popularmovies.domain.Movie;
+import com.udacity.luisev96.popularmovies.domain.Review;
 import com.udacity.luisev96.popularmovies.domain.Video;
 
 import org.json.JSONArray;
@@ -31,6 +32,9 @@ public class JsonUtils {
     private static final String KEY_SITE = "site";
     private static final String KEY_SIZE = "size";
     private static final String KEY_TYPE = "type";
+    private static final String KEY_AUTHOR = "author";
+    private static final String KEY_CONTENT = "content";
+    private static final String KEY_URL = "url";
 
     public static  List<Movie> parseMovieJson(String json) {
         List<Movie> movies = new ArrayList<>();
@@ -79,5 +83,24 @@ public class JsonUtils {
             e.printStackTrace();
         }
         return videos;
+    }
+
+    public static  List<Review> parseReviewJson(String json) {
+        List<Review> reviews = new ArrayList<>();
+        try {
+            JSONObject object = new JSONObject(json);
+            JSONArray results = object.getJSONArray(KEY_RESULTS);
+            for (int i = 0; i < results.length(); i++) {
+                JSONObject review = results.getJSONObject(i);
+                String id = review.getString(KEY_ID);
+                String author = review.getString(KEY_AUTHOR);
+                String content = review.getString(KEY_CONTENT);
+                String url = review.getString(KEY_URL);
+                reviews.add(new Review(id, author, content, url));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return reviews;
     }
 }
