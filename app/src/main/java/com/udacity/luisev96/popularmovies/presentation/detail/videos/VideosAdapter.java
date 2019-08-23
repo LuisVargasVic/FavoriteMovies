@@ -1,6 +1,7 @@
 package com.udacity.luisev96.popularmovies.presentation.detail.videos;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import com.udacity.luisev96.popularmovies.R;
 import com.udacity.luisev96.popularmovies.databinding.VideoItemBinding;
 import com.udacity.luisev96.popularmovies.domain.Video;
+import com.udacity.luisev96.popularmovies.presentation.video.VideoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +23,13 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
     private List<Video> mVideosList = new ArrayList<>();
     private Context mContext;
+    private static final String URL = "url";
 
     VideosAdapter(Context context) {
         mContext = context;
     }
 
-    public void setVideos(List<Video> mVideosList) {
+    void setVideos(List<Video> mVideosList) {
         this.mVideosList = mVideosList;
         notifyDataSetChanged();
     }
@@ -72,9 +75,9 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
         @Override
         public void onClick(View view) {
-            /*Intent intent = new Intent(mContext, VideoActivity.class);
-            intent.putExtra(VIDEO, mVideo);
-            startActivity(intent);*/
+            Intent intent = new Intent(mContext, VideoActivity.class);
+            intent.putExtra(URL, mVideo.getKey());
+            mContext.startActivity(intent);
         }
     }
 }

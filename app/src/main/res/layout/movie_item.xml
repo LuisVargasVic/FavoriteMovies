@@ -4,13 +4,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="@dimen/movie_item_height"
         android:padding="2dp">
 
         <ImageView
             android:id="@+id/iv_movie_image"
-            android:layout_width="100dp"
-            android:layout_height="160dp"
+            android:layout_width="@dimen/movie_width"
+            android:layout_height="@dimen/movie_height"
             android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
