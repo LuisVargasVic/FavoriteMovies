@@ -28,7 +28,7 @@ public class DetailActivity extends AppCompatActivity implements RemoteListener 
     private ActivityDetailBinding activityDetailBinding;
     private DetailViewModel viewModel;
     private Menu mMenu;
-    private String type;
+    private String type = INSERT;
     public static final String MOVIE = "movie";
     private static final String BASE_URL = "https://image.tmdb.org/t/p/w780";
     private static final String INSERT = "insert";
