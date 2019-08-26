@@ -61,7 +61,7 @@ public class MoviesTask extends AsyncTask<URL, Void, String> {
                             movie.getOverview(),
                             movie.getReleaseDate()
                     );
-                    mMoviesDatabase.moviesDao().insert(databaseMovie);
+                    mMoviesDatabase.moviesDao().insertMovie(databaseMovie);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

@@ -6,6 +6,7 @@
     <string name="movie">Movie</string>
     <string name="action_popular">Popular Movies</string>
     <string name="action_top">Top Rated Movies</string>
+    <string name="action_fav">Favorite Movies</string>
     <string name="average_vote">Average vote:</string>
     <string name="release_date">Release date:</string>
     <string name="first_air_date">First air date:</string>

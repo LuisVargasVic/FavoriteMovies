@@ -18,6 +18,7 @@ public class MoviesViewModel extends AndroidViewModel {
     private static final String TAG = MoviesViewModel.class.getSimpleName();
     MoviesRepository repository;
     private LiveData<List<Movie>> movies;
+    private LiveData<List<Movie>> favMovies;
 
     public MoviesViewModel(Application application) {
         super(application);
@@ -25,6 +26,7 @@ public class MoviesViewModel extends AndroidViewModel {
         Log.d(TAG, "Actively retrieving the tasks from the DataBase");
         repository = new MoviesRepository(database);
         movies = repository.getMovies();
+        favMovies = repository.getFavMovies();
     }
 
     public void refresh(String typeSelected, RemoteListener remoteListener) {
@@ -34,5 +36,9 @@ public class MoviesViewModel extends AndroidViewModel {
 
     public LiveData<List<Movie>> getMovies() {
         return movies;
+    }
+
+    public LiveData<List<Movie>> getFavMovies() {
+        return favMovies;
     }
 }

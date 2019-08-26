@@ -4,6 +4,7 @@ import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
+import com.udacity.luisev96.popularmovies.database.DatabaseFavMovie;
 import com.udacity.luisev96.popularmovies.database.DatabaseMovie;
 import com.udacity.luisev96.popularmovies.database.DatabaseReview;
 import com.udacity.luisev96.popularmovies.database.DatabaseVideo;
@@ -11,6 +12,7 @@ import com.udacity.luisev96.popularmovies.database.MoviesDatabase;
 import com.udacity.luisev96.popularmovies.domain.Movie;
 import com.udacity.luisev96.popularmovies.domain.Review;
 import com.udacity.luisev96.popularmovies.domain.Video;
+import com.udacity.luisev96.popularmovies.remote.FavMovieTask;
 import com.udacity.luisev96.popularmovies.remote.MoviesTask;
 import com.udacity.luisev96.popularmovies.remote.RemoteListener;
 import com.udacity.luisev96.popularmovies.remote.ReviewsTask;
@@ -151,6 +153,70 @@ public class MoviesRepository {
                         }
 
                         return reviews;
+                    }
+                });
+    }
+
+    public LiveData<Movie> getFavMovie(final int id) {
+        return Transformations.map(mMoviesDatabase.moviesDao().getFavMovie(id),
+                new Function<DatabaseFavMovie, Movie>() {
+                    @Override
+                    public Movie apply(DatabaseFavMovie databaseFavMovie) {
+                        if (databaseFavMovie != null) {
+                            return new Movie(
+                                    databaseFavMovie.getId(),
+                                    databaseFavMovie.getVoteCount(),
+                                    databaseFavMovie.isVideo(),
+                                    databaseFavMovie.getVoteAverage(),
+                                    databaseFavMovie.getTitle(),
+                                    databaseFavMovie.getPopularity(),
+                                    databaseFavMovie.getPosterPath(),
+                                    databaseFavMovie.getOriginalLanguage(),
+                                    databaseFavMovie.getOriginalTitle(),
+                                    databaseFavMovie.getBackdropPath(),
+                                    databaseFavMovie.isAdult(),
+                                    databaseFavMovie.getOverview(),
+                                    databaseFavMovie.getReleaseDate()
+                            );
+                        } else {
+                            return null;
+                        }
+                    }
+                });
+    }
+
+    public void favMovie(RemoteListener remoteListener, Movie movie, String type) {
+        new FavMovieTask(mMoviesDatabase, remoteListener, movie, type).execute();
+    }
+
+    public LiveData<List<Movie>> getFavMovies() {
+        return Transformations.map(mMoviesDatabase.moviesDao().getFavMovies(),
+                new Function<List<DatabaseFavMovie>, List<Movie>>() {
+                    @Override
+                    public List<Movie> apply(List<DatabaseFavMovie> databaseFavMovies) {
+                        List<Movie> favMovies = new ArrayList<>();
+
+                        for (int i = 0; i < databaseFavMovies.size(); i++) {
+                            DatabaseFavMovie databaseFavMovie = databaseFavMovies.get(i);
+                            favMovies.add(new Movie(
+                                            databaseFavMovie.getId(),
+                                            databaseFavMovie.getVoteCount(),
+                                            databaseFavMovie.isVideo(),
+                                            databaseFavMovie.getVoteAverage(),
+                                            databaseFavMovie.getTitle(),
+                                            databaseFavMovie.getPopularity(),
+                                            databaseFavMovie.getPosterPath(),
+                                            databaseFavMovie.getOriginalLanguage(),
+                                            databaseFavMovie.getOriginalTitle(),
+                                            databaseFavMovie.getBackdropPath(),
+                                            databaseFavMovie.isAdult(),
+                                            databaseFavMovie.getOverview(),
+                                            databaseFavMovie.getReleaseDate()
+                                    )
+                            );
+                        }
+
+                        return favMovies;
                     }
                 });
     }

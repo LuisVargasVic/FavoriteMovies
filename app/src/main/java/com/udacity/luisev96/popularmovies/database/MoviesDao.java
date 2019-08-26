@@ -2,6 +2,7 @@ package com.udacity.luisev96.popularmovies.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -15,7 +16,7 @@ public interface MoviesDao {
     LiveData<List<DatabaseMovie>> getMovies();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(DatabaseMovie movie);
+    void insertMovie(DatabaseMovie movie);
 
     @Query("SELECT * FROM DatabaseVideo WHERE typeId = :movieId")
     LiveData<List<DatabaseVideo>> getVideos(int movieId);
@@ -28,4 +29,16 @@ public interface MoviesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertReview(DatabaseReview review);
+
+    @Query("SELECT * FROM DatabaseFavMovie")
+    LiveData<List<DatabaseFavMovie>> getFavMovies();
+
+    @Query("SELECT * FROM DatabaseFavMovie WHERE id = :id")
+    LiveData<DatabaseFavMovie> getFavMovie(int id);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertFavMovie(DatabaseFavMovie movie);
+
+    @Delete
+    void deleteFavMovie(DatabaseFavMovie movie);
 }
