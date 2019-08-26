@@ -20,15 +20,9 @@ public class VideoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityVideoBinding = DataBindingUtil.setContentView(this, R.layout.activity_video);
 
-        if (savedInstanceState != null) {
-            url = savedInstanceState.getString(URL);
-        } else {
-            if (getIntent() != null) {
-                if (getIntent().hasExtra(URL)) {
-                    url = getIntent().getStringExtra(URL);
-                }
-            }
-        }
+        if (savedInstanceState != null) url = savedInstanceState.getString(URL);
+        else if (getIntent() != null)
+            if (getIntent().hasExtra(URL)) url = getIntent().getStringExtra(URL);
 
         youtubeFragment = new YoutubeFragment(url);
         getSupportFragmentManager().beginTransaction().replace(R.id.youtube_player, youtubeFragment).commit();
@@ -43,14 +37,9 @@ public class VideoActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (youtubeFragment != null) {
-            if (youtubeFragment.isFullScreen) {
-                youtubeFragment.closeFullScreen();
-            } else {
-                super.onBackPressed();
-            }
-        } else {
-            super.onBackPressed();
-        }
+        if (youtubeFragment != null)
+            if (youtubeFragment.isFullScreen) youtubeFragment.closeFullScreen();
+            else super.onBackPressed();
+        else super.onBackPressed();
     }
 }

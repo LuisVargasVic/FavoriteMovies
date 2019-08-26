@@ -1,6 +1,5 @@
 package com.udacity.luisev96.popularmovies.presentation.detail.reviews;
 
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,12 +46,8 @@ public class ReviewsFragment extends Fragment implements RemoteListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (savedInstanceState != null) {
-            movie = (Movie) savedInstanceState.getSerializable(MOVIE_KEY);
-        } else {
-            assert getArguments() != null;
-            movie = (Movie) getArguments().getSerializable(MOVIE_KEY);
-        }
+        assert getArguments() != null;
+        movie = (Movie) getArguments().getSerializable(MOVIE_KEY);
         assert movie != null;
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         fragmentReviewsBinding.rvReviews.setLayoutManager(layoutManager);
@@ -68,12 +63,11 @@ public class ReviewsFragment extends Fragment implements RemoteListener {
         viewModel.getReviews().observe(this, new Observer<List<Review>>() {
             @Override
             public void onChanged(@Nullable List<Review> reviews) {
-                Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
+                Log.d(TAG, "Updating list of reviews from LiveData in ViewModel");
                 mAdapter.setReviews(reviews);
             }
         });
     }
-
 
     @Override
     public void preExecute() {
@@ -92,12 +86,5 @@ public class ReviewsFragment extends Fragment implements RemoteListener {
             fragmentReviewsBinding.rvReviews.setVisibility(View.GONE);
             fragmentReviewsBinding.network.setVisibility(View.VISIBLE);
         }
-    }
-
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(MOVIE_KEY, movie);
     }
 }

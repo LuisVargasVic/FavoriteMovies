@@ -46,12 +46,8 @@ public class VideosFragment extends Fragment implements RemoteListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (savedInstanceState != null) {
-            movie = (Movie) savedInstanceState.getSerializable(MOVIE_KEY);
-        } else {
-            assert getArguments() != null;
-            movie = (Movie) getArguments().getSerializable(MOVIE_KEY);
-        }
+        assert getArguments() != null;
+        movie = (Movie) getArguments().getSerializable(MOVIE_KEY);
         assert movie != null;
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         fragmentVideosBinding.rvVideos.setLayoutManager(layoutManager);
@@ -67,12 +63,11 @@ public class VideosFragment extends Fragment implements RemoteListener {
         viewModel.getVideos().observe(this, new Observer<List<Video>>() {
             @Override
             public void onChanged(@Nullable List<Video> videos) {
-                Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
+                Log.d(TAG, "Updating list of videos from LiveData in ViewModel");
                 mAdapter.setVideos(videos);
             }
         });
     }
-
 
     @Override
     public void preExecute() {
@@ -91,12 +86,5 @@ public class VideosFragment extends Fragment implements RemoteListener {
             fragmentVideosBinding.rvVideos.setVisibility(View.GONE);
             fragmentVideosBinding.network.setVisibility(View.VISIBLE);
         }
-    }
-
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(MOVIE_KEY, movie);
     }
 }

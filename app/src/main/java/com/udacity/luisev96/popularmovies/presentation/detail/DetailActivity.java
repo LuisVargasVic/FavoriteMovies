@@ -42,19 +42,11 @@ public class DetailActivity extends AppCompatActivity implements RemoteListener 
         activityDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         setSupportActionBar(activityDetailBinding.toolbar);
 
-        if (savedInstanceState != null) {
-            movie = (Movie) savedInstanceState.getSerializable(MOVIE);
-            viewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
-            populateUI();
-        } else {
-            if (getIntent() != null) {
-                if (getIntent().hasExtra(MOVIE)) {
-                    movie = (Movie) getIntent().getSerializableExtra(MOVIE);
-                    viewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
-                    populateUI();
-                }
-            }
-        }
+        if (savedInstanceState != null) movie = (Movie) savedInstanceState.getSerializable(MOVIE);
+        else if (getIntent() != null)
+            if (getIntent().hasExtra(MOVIE)) movie = (Movie) getIntent().getSerializableExtra(MOVIE);
+        viewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
+        populateUI();
     }
 
     public void populateUI() {
@@ -64,11 +56,8 @@ public class DetailActivity extends AppCompatActivity implements RemoteListener 
             @Override
             public void onChanged(@Nullable Movie movie) {
                 Log.d(TAG, "Updating fav movie from LiveData in ViewModel");
-                if (movie != null) {
-                    type = DELETE;
-                } else {
-                    type = INSERT;
-                }
+                if (movie != null) type = DELETE;
+                else type = INSERT;
             }
         });
         Objects.requireNonNull(getSupportActionBar()).setTitle(movie.getTitle());
@@ -90,11 +79,8 @@ public class DetailActivity extends AppCompatActivity implements RemoteListener 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.fav, menu);
         mMenu = menu;
-        if (type.equals(INSERT)) {
-            menu.getItem(0).setIcon(R.drawable.ic_star_border);
-        } else {
-            menu.getItem(0).setIcon(R.drawable.ic_star);
-        }
+        if (type.equals(INSERT)) menu.getItem(0).setIcon(R.drawable.ic_star_border);
+        else menu.getItem(0).setIcon(R.drawable.ic_star);
         return true;
     }
 
@@ -118,11 +104,8 @@ public class DetailActivity extends AppCompatActivity implements RemoteListener 
 
     @Override
     public void postExecute(Boolean isData) {
-        if (isData) {
-            mMenu.getItem(0).setIcon(R.drawable.ic_star);
-        } else {
-            mMenu.getItem(0).setIcon(R.drawable.ic_star_border);
-        }
+        if (isData) mMenu.getItem(0).setIcon(R.drawable.ic_star);
+        else mMenu.getItem(0).setIcon(R.drawable.ic_star_border);
     }
 
     @Override

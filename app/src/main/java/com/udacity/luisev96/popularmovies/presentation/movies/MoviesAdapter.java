@@ -1,5 +1,7 @@
 package com.udacity.luisev96.popularmovies.presentation.movies;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +15,12 @@ import com.squareup.picasso.Picasso;
 import com.udacity.luisev96.popularmovies.R;
 import com.udacity.luisev96.popularmovies.databinding.MovieItemBinding;
 import com.udacity.luisev96.popularmovies.domain.Movie;
+import com.udacity.luisev96.popularmovies.presentation.detail.DetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.udacity.luisev96.popularmovies.presentation.movies.MoviesActivity.MOVIE;
 
 /**
  * Created by Luis Vargas on 2019-08-20.
@@ -24,15 +29,11 @@ import java.util.List;
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
 
     private List<Movie> mMoviesList = new ArrayList<>();
-    private MovieClickListener mMovieClickListener;
+    private Context mContext;
     private static final String BASE_URL = "https://image.tmdb.org/t/p/w185";
 
-    public interface MovieClickListener{
-        void movieClicked(Movie movie);
-    }
-
-    MoviesAdapter(MovieClickListener movieClickListener) {
-        mMovieClickListener = movieClickListener;
+    MoviesAdapter(Context context) {
+        mContext = context;
     }
 
     public void setMovies(List<Movie> mMoviesList) {
@@ -80,7 +81,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
         @Override
         public void onClick(View view) {
-            mMovieClickListener.movieClicked(mMovie);
+            Intent intent = new Intent(mContext, DetailActivity.class);
+            intent.putExtra(MOVIE, mMovie);
+            mContext.startActivity(intent);
         }
     }
 }

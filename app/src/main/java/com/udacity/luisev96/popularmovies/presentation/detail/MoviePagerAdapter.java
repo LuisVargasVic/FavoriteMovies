@@ -19,7 +19,7 @@ public class MoviePagerAdapter extends FragmentPagerAdapter {
     private Movie mMovie;
     private static final String MOVIE_KEY = "movie";
 
-    public MoviePagerAdapter(FragmentManager fragmentManager, Movie movie) {
+    MoviePagerAdapter(FragmentManager fragmentManager, Movie movie) {
         super(fragmentManager);
         mMovie = movie;
     }
@@ -44,7 +44,7 @@ public class MoviePagerAdapter extends FragmentPagerAdapter {
         return mFragments.size();
     }
 
-    public void addFragment(Fragment fragment, String title) {
+    void addFragment(Fragment fragment, String title) {
         mFragments.add(fragment);
         mFragmentsTitle.add(title);
     }

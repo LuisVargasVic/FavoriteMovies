@@ -18,13 +18,13 @@ import com.udacity.luisev96.popularmovies.remote.RemoteListener;
 public class DetailViewModel extends AndroidViewModel {
 
     private static final String TAG = DetailViewModel.class.getSimpleName();
-    MoviesRepository repository;
+    private MoviesRepository repository;
     private LiveData<Movie> movie;
 
     public DetailViewModel(Application application) {
         super(application);
         MoviesDatabase database = MoviesDatabase.getInstance(this.getApplication());
-        Log.d(TAG, "Actively retrieving the tasks from the DataBase");
+        Log.d(TAG, "Actively retrieving the fav movie from the DataBase");
         repository = new MoviesRepository(database);
     }
 

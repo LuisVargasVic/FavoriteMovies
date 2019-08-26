@@ -17,23 +17,21 @@ public class VideosViewModel extends AndroidViewModel {
 
     private static final String TAG = VideosViewModel.class.getSimpleName();
     private MoviesRepository repository;
-    private int mMovieId;
     private LiveData<List<Video>> videos;
 
     public VideosViewModel(Application application) {
         super(application);
         MoviesDatabase database = MoviesDatabase.getInstance(this.getApplication());
-        Log.d(TAG, "Actively retrieving the tasks from the DataBase");
+        Log.d(TAG, "Actively retrieving the videos from the DataBase");
         repository = new MoviesRepository(database);
     }
 
-    public void videos(RemoteListener remoteListener, int movieId) {
-        mMovieId = movieId;
+    void videos(RemoteListener remoteListener, int movieId) {
         videos = repository.getVideos(movieId);
-        repository.videos(mMovieId, remoteListener);
+        repository.videos(movieId, remoteListener);
     }
 
-    public LiveData<List<Video>> getVideos() {
+    LiveData<List<Video>> getVideos() {
         return videos;
     }
 }

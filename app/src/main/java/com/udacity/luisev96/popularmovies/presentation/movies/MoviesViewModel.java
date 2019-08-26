@@ -23,7 +23,7 @@ public class MoviesViewModel extends AndroidViewModel {
     public MoviesViewModel(Application application) {
         super(application);
         MoviesDatabase database = MoviesDatabase.getInstance(this.getApplication());
-        Log.d(TAG, "Actively retrieving the tasks from the DataBase");
+        Log.d(TAG, "Actively retrieving the movies from the DataBase");
         repository = new MoviesRepository(database);
         movies = repository.getMovies();
         favMovies = repository.getFavMovies();

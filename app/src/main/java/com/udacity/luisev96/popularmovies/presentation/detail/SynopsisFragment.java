@@ -39,12 +39,8 @@ public class SynopsisFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (savedInstanceState != null) {
-            movie = (Movie) savedInstanceState.getSerializable(MOVIE_KEY);
-        } else {
-            assert getArguments() != null;
-            movie = (Movie) getArguments().getSerializable(MOVIE_KEY);
-        }
+        assert getArguments() != null;
+        movie = (Movie) getArguments().getSerializable(MOVIE_KEY);
         assert movie != null;
         Picasso
                 .get()
@@ -57,11 +53,5 @@ public class SynopsisFragment extends Fragment {
         fragmentSynopsisBinding.tvDetailMoviePopularity.setText(String.valueOf(movie.getPopularity()));
         fragmentSynopsisBinding.tvDetailMovieOriginalLanguage.setText(String.valueOf(movie.getOriginalLanguage()));
         fragmentSynopsisBinding.tvDetailMovieOverview.setText(movie.getOverview());
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(MOVIE_KEY, movie);
     }
 }

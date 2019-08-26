@@ -21,7 +21,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsV
     ReviewsAdapter() {
     }
 
-    public void setReviews(List<Review> mReviewsList) {
+    void setReviews(List<Review> mReviewsList) {
         this.mReviewsList = mReviewsList;
         notifyDataSetChanged();
     }

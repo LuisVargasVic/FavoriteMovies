@@ -17,23 +17,21 @@ public class ReviewsViewModel extends AndroidViewModel {
 
     private static final String TAG = ReviewsViewModel.class.getSimpleName();
     private MoviesRepository repository;
-    private int mMovieId;
     private LiveData<List<Review>> reviews;
 
     public ReviewsViewModel(Application application) {
         super(application);
         MoviesDatabase database = MoviesDatabase.getInstance(this.getApplication());
-        Log.d(TAG, "Actively retrieving the tasks from the DataBase");
+        Log.d(TAG, "Actively retrieving the reviews from the DataBase");
         repository = new MoviesRepository(database);
     }
 
-    public void reviews(RemoteListener remoteListener, int movieId) {
-        mMovieId = movieId;
+    void reviews(RemoteListener remoteListener, int movieId) {
         reviews = repository.getReviews(movieId);
-        repository.reviews(mMovieId, remoteListener);
+        repository.reviews(movieId, remoteListener);
     }
 
-    public LiveData<List<Review>> getReviews() {
+    LiveData<List<Review>> getReviews() {
         return reviews;
     }
 }
