@@ -48,8 +48,4 @@ public class MoviePagerAdapter extends FragmentPagerAdapter {
         mFragments.add(fragment);
         mFragmentsTitle.add(title);
     }
-
-    Fragment getFragment(int position) {
-        return mFragments.get(position);
-    }
 }

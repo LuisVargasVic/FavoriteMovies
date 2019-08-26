@@ -13,7 +13,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
 import com.udacity.luisev96.popularmovies.R;
 import com.udacity.luisev96.popularmovies.databinding.ActivityDetailBinding;
@@ -24,7 +23,7 @@ import com.udacity.luisev96.popularmovies.remote.listeners.RemoteListener;
 
 import java.util.Objects;
 
-public class DetailActivity extends AppCompatActivity implements RemoteListener, TabLayout.BaseOnTabSelectedListener {
+public class DetailActivity extends AppCompatActivity implements RemoteListener {
 
     private ActivityDetailBinding activityDetailBinding;
     private DetailViewModel viewModel;
@@ -43,7 +42,6 @@ public class DetailActivity extends AppCompatActivity implements RemoteListener,
         super.onCreate(savedInstanceState);
         activityDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         setSupportActionBar(activityDetailBinding.toolbar);
-
         if (savedInstanceState != null) movie = (Movie) savedInstanceState.getSerializable(MOVIE);
         else if (getIntent() != null)
             if (getIntent().hasExtra(MOVIE)) movie = (Movie) getIntent().getSerializableExtra(MOVIE);
@@ -75,7 +73,6 @@ public class DetailActivity extends AppCompatActivity implements RemoteListener,
         activityDetailBinding.viewPager.setAdapter(adapter);
         activityDetailBinding.viewPager.setOffscreenPageLimit(3);
         activityDetailBinding.tabLayout.setupWithViewPager(activityDetailBinding.viewPager);
-        activityDetailBinding.tabLayout.setOnTabSelectedListener(this);
     }
 
 
@@ -116,24 +113,5 @@ public class DetailActivity extends AppCompatActivity implements RemoteListener,
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(MOVIE, movie);
-    }
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        if (tab.getPosition() == 1) {
-            ((ReviewsFragment) adapter.getFragment(tab.getPosition())).populateUI(movie.getId());
-        } else if (tab.getPosition() == 2) {
-            ((VideosFragment) adapter.getFragment(tab.getPosition())).populateUI(movie.getId());
-        }
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
     }
 }

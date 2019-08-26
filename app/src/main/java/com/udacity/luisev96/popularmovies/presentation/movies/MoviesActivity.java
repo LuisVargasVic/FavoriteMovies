@@ -62,14 +62,6 @@ public class MoviesActivity extends AppCompatActivity implements RemoteListener,
         mAdapter = new MoviesAdapter(this);
         activityMoviesBinding.rvMoviesList.setAdapter(mAdapter);
         viewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
-        viewModel.getMovies().observe(this, new Observer<List<Movie>>() {
-            @Override
-            public void onChanged(@Nullable List<Movie> movies) {
-                Log.d(TAG, "Updating list of movies from LiveData in ViewModel");
-                mMovies = movies;
-                if (!typeSelected.equals(SORT_FAVORITE)) sort();
-            }
-        });
         viewModel.getFavMovies().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(List<Movie> favoriteMovies) {
@@ -131,7 +123,14 @@ public class MoviesActivity extends AppCompatActivity implements RemoteListener,
     public void postExecute(Boolean isData) {
         activityMoviesBinding.pb.setVisibility(View.GONE);
         activityMoviesBinding.rvMoviesList.setVisibility(View.VISIBLE);
-        if (!mConnection) sort();
+        viewModel.getMovies().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(@Nullable List<Movie> movies) {
+                Log.d(TAG, "Updating list of movies from LiveData in ViewModel");
+                mMovies = movies;
+                if (!typeSelected.equals(SORT_FAVORITE)) sort();
+            }
+        });
     }
 
     @Override

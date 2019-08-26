@@ -18,12 +18,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.udacity.luisev96.popularmovies.R;
-import com.udacity.luisev96.popularmovies.remote.receivers.ReviewsReceiver;
 import com.udacity.luisev96.popularmovies.databinding.FragmentReviewsBinding;
 import com.udacity.luisev96.popularmovies.domain.Movie;
 import com.udacity.luisev96.popularmovies.domain.Review;
 import com.udacity.luisev96.popularmovies.remote.listeners.ConnectionListener;
 import com.udacity.luisev96.popularmovies.remote.listeners.RemoteListener;
+import com.udacity.luisev96.popularmovies.remote.receivers.ReviewsReceiver;
 
 import java.util.List;
 import java.util.Objects;
@@ -36,6 +36,7 @@ public class ReviewsFragment extends Fragment implements RemoteListener, Connect
     private FragmentReviewsBinding fragmentReviewsBinding;
     private ReviewsViewModel viewModel;
     private ReviewsAdapter mAdapter;
+    private Movie mMovie;
     private BroadcastReceiver mReceiver;
     private static ConnectionListener connectionListener;
     private static final String MOVIE_KEY = "movie";
@@ -56,21 +57,43 @@ public class ReviewsFragment extends Fragment implements RemoteListener, Connect
         super.onViewCreated(view, savedInstanceState);
         connectionListener = this;
         assert getArguments() != null;
-        Movie movie = (Movie) getArguments().getSerializable(MOVIE_KEY);
-        assert movie != null;
+        mMovie = (Movie) getArguments().getSerializable(MOVIE_KEY);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         fragmentReviewsBinding.rvReviews.setLayoutManager(layoutManager);
         fragmentReviewsBinding.rvReviews.setHasFixedSize(true);
         mAdapter = new ReviewsAdapter();
         fragmentReviewsBinding.rvReviews.setAdapter(mAdapter);
         viewModel = ViewModelProviders.of(this).get(ReviewsViewModel.class);
-        populateUI(movie.getId());
+        populateUI();
     }
 
-    public void populateUI(int id) {
+    private void populateUI() {
+        viewModel.reviews(this, mMovie.getId());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         mReceiver = new ReviewsReceiver();
         Objects.requireNonNull(getActivity()).registerReceiver(mReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-        viewModel.reviews(this, id);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Objects.requireNonNull(getActivity()).unregisterReceiver(mReceiver);
+    }
+
+    @Override
+    public void preExecute() {
+        fragmentReviewsBinding.pb.setVisibility(View.VISIBLE);
+        fragmentReviewsBinding.message.setVisibility(View.GONE);
+        fragmentReviewsBinding.rvReviews.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void postExecute(Boolean isData) {
+        fragmentReviewsBinding.pb.setVisibility(View.GONE);
         viewModel.getReviews().observe(this, new Observer<List<Review>>() {
             @Override
             public void onChanged(@Nullable List<Review> reviews) {
@@ -87,25 +110,6 @@ public class ReviewsFragment extends Fragment implements RemoteListener, Connect
         });
     }
 
-    @Override
-    public void preExecute() {
-        fragmentReviewsBinding.pb.setVisibility(View.VISIBLE);
-        fragmentReviewsBinding.message.setVisibility(View.GONE);
-        fragmentReviewsBinding.rvReviews.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void postExecute(Boolean isData) {
-        fragmentReviewsBinding.pb.setVisibility(View.GONE);
-        fragmentReviewsBinding.rvReviews.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Objects.requireNonNull(getActivity()).unregisterReceiver(mReceiver);
-    }
-
     public static void setReviewsConnection(Boolean connection) {
         connectionListener.connection(connection);
     }
@@ -114,6 +118,7 @@ public class ReviewsFragment extends Fragment implements RemoteListener, Connect
     public void connection(Boolean connection) {
         if (connection) {
             fragmentReviewsBinding.message.setText(R.string.reviews_empty);
+            populateUI();
         } else {
             fragmentReviewsBinding.message.setText(R.string.reviews_connection);
         }
