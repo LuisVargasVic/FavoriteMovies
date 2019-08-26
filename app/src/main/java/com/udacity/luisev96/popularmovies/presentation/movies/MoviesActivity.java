@@ -41,7 +41,6 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.M
     public static final String SORT_POPULAR = "popular";
     public static final String SORT_TOP = "top_rated";
     public static final String SORT_FAVORITE = "favorite";
-    public static final int DETAIL = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

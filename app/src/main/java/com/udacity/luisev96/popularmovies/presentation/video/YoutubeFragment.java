@@ -8,7 +8,7 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 public class YoutubeFragment extends YouTubePlayerSupportFragment implements YouTubePlayer.OnInitializedListener, YouTubePlayer.OnFullscreenListener {
 
-    private YouTubePlayer activePlayer;
+    private YouTubePlayer youTubePlayer;
     Boolean isFullScreen = false;
     private static final String URL = "url";
     private static final String API_KEY = "YOUR_YOUTUBE_API_KEY";
@@ -28,10 +28,10 @@ public class YoutubeFragment extends YouTubePlayerSupportFragment implements You
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
         if (!b) {
-            activePlayer = youTubePlayer;
-            activePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-            activePlayer.setOnFullscreenListener(this);
-            activePlayer.loadVideo(getArguments().getString(URL), 0);
+            this.youTubePlayer = youTubePlayer;
+            this.youTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+            this.youTubePlayer.setOnFullscreenListener(this);
+            this.youTubePlayer.loadVideo(getArguments().getString(URL), 0);
         }
     }
 
@@ -46,6 +46,6 @@ public class YoutubeFragment extends YouTubePlayerSupportFragment implements You
     }
 
     void closeFullScreen() {
-        activePlayer.setFullscreen(false);
+        youTubePlayer.setFullscreen(false);
     }
 }

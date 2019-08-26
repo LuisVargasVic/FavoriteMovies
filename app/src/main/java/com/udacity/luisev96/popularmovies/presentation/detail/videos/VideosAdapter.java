@@ -2,6 +2,7 @@ package com.udacity.luisev96.popularmovies.presentation.detail.videos;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,9 +76,26 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
         @Override
         public void onClick(View view) {
+            // 1st choice
+            inYTApp();
+            // 2nd choice
+            // inApp();
+        }
+
+        void inApp() {
             Intent intent = new Intent(mContext, VideoActivity.class);
             intent.putExtra(URL, mVideo.getKey());
             mContext.startActivity(intent);
+        }
+
+        void inYTApp() {
+            try {
+                Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + mVideo.getKey()));
+                mContext.startActivity(appIntent);
+            } catch (Exception ex) {
+                Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + mVideo.getKey()));
+                mContext.startActivity(webIntent);
+            }
         }
     }
 }
