@@ -1,4 +1,4 @@
-package com.udacity.luisev96.popularmovies.remote;
+package com.udacity.luisev96.popularmovies.remote.listeners;
 
 public interface RemoteListener {
     void preExecute();

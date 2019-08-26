@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.udacity.luisev96.popularmovies.data.MoviesRepository;
 import com.udacity.luisev96.popularmovies.database.MoviesDatabase;
 import com.udacity.luisev96.popularmovies.domain.Video;
-import com.udacity.luisev96.popularmovies.remote.RemoteListener;
+import com.udacity.luisev96.popularmovies.remote.listeners.RemoteListener;
 
 import java.util.List;
 

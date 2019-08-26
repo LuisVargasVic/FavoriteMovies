@@ -14,11 +14,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-            <ImageView
-                android:id="@+id/network"
+            <TextView
+                android:id="@+id/message"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="16dp"
+                android:gravity="center"
+                android:text="@string/movies_empty"
+                android:textColor="@android:color/black"
+                android:textSize="24sp"
+                android:textStyle="bold"
                 android:visibility="gone" />
 
             <ProgressBar
@@ -31,7 +36,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_movies_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone">
 
             </androidx.recyclerview.widget.RecyclerView>
 

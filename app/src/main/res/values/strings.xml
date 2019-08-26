@@ -17,4 +17,11 @@
     <string name="synopsis">Synopsis</string>
     <string name="videos">Videos</string>
     <string name="reviews">Reviews</string>
+    <string name="favorite_empty">You haven\'t select \n favorite movies</string>
+    <string name="movies_empty">No movies \n available or detected</string>
+    <string name="reviews_empty">No reviews \n available or detected</string>
+    <string name="videos_empty">No videos \n available or detected</string>
+    <string name="movies_connection">Connect to internet to \n get movies</string>
+    <string name="reviews_connection">Connect to internet to \n get reviews</string>
+    <string name="videos_connection">Connect to internet to \n get videos</string>
 </resources>

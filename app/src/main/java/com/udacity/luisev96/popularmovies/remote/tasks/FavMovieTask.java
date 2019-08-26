@@ -1,10 +1,11 @@
-package com.udacity.luisev96.popularmovies.remote;
+package com.udacity.luisev96.popularmovies.remote.tasks;
 
 import android.os.AsyncTask;
 
 import com.udacity.luisev96.popularmovies.database.DatabaseFavMovie;
 import com.udacity.luisev96.popularmovies.database.MoviesDatabase;
 import com.udacity.luisev96.popularmovies.domain.Movie;
+import com.udacity.luisev96.popularmovies.remote.listeners.RemoteListener;
 
 /**
  * Created by Luis Vargas on 2019-08-25.

@@ -1,5 +1,8 @@
 package com.udacity.luisev96.popularmovies.presentation.detail.videos;
 
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,22 +17,27 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.udacity.luisev96.popularmovies.R;
+import com.udacity.luisev96.popularmovies.remote.receivers.VideosReceiver;
 import com.udacity.luisev96.popularmovies.databinding.FragmentVideosBinding;
 import com.udacity.luisev96.popularmovies.domain.Movie;
 import com.udacity.luisev96.popularmovies.domain.Video;
-import com.udacity.luisev96.popularmovies.remote.RemoteListener;
+import com.udacity.luisev96.popularmovies.remote.listeners.ConnectionListener;
+import com.udacity.luisev96.popularmovies.remote.listeners.RemoteListener;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class VideosFragment extends Fragment implements RemoteListener {
+public class VideosFragment extends Fragment implements RemoteListener, ConnectionListener {
 
     private FragmentVideosBinding fragmentVideosBinding;
     private VideosViewModel viewModel;
     private VideosAdapter mAdapter;
-    private Movie movie;
+    private BroadcastReceiver mReceiver;
+    private static ConnectionListener connectionListener;
     private static final String MOVIE_KEY = "movie";
     private static final String TAG = VideosFragment.class.getSimpleName();
 
@@ -46,8 +54,9 @@ public class VideosFragment extends Fragment implements RemoteListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        connectionListener = this;
         assert getArguments() != null;
-        movie = (Movie) getArguments().getSerializable(MOVIE_KEY);
+        Movie movie = (Movie) getArguments().getSerializable(MOVIE_KEY);
         assert movie != null;
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         fragmentVideosBinding.rvVideos.setLayoutManager(layoutManager);
@@ -55,16 +64,25 @@ public class VideosFragment extends Fragment implements RemoteListener {
         mAdapter = new VideosAdapter(getContext());
         fragmentVideosBinding.rvVideos.setAdapter(mAdapter);
         viewModel = ViewModelProviders.of(this).get(VideosViewModel.class);
-        populateUI();
+        populateUI(movie.getId());
     }
 
-    private void populateUI() {
-        viewModel.videos(this, movie.getId());
+    public void populateUI(int id) {
+        mReceiver = new VideosReceiver();
+        Objects.requireNonNull(getActivity()).registerReceiver(mReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        viewModel.videos(this, id);
         viewModel.getVideos().observe(this, new Observer<List<Video>>() {
             @Override
             public void onChanged(@Nullable List<Video> videos) {
                 Log.d(TAG, "Updating list of videos from LiveData in ViewModel");
-                mAdapter.setVideos(videos);
+                if (videos == null || videos.isEmpty()) {
+                    fragmentVideosBinding.message.setVisibility(View.VISIBLE);
+                    fragmentVideosBinding.rvVideos.setVisibility(View.GONE);
+                } else {
+                    fragmentVideosBinding.message.setVisibility(View.GONE);
+                    fragmentVideosBinding.rvVideos.setVisibility(View.VISIBLE);
+                    mAdapter.setVideos(videos);
+                }
             }
         });
     }
@@ -72,19 +90,32 @@ public class VideosFragment extends Fragment implements RemoteListener {
     @Override
     public void preExecute() {
         fragmentVideosBinding.pb.setVisibility(View.VISIBLE);
-        fragmentVideosBinding.network.setVisibility(View.GONE);
+        fragmentVideosBinding.message.setVisibility(View.GONE);
         fragmentVideosBinding.rvVideos.setVisibility(View.GONE);
     }
 
     @Override
     public void postExecute(Boolean isData) {
         fragmentVideosBinding.pb.setVisibility(View.GONE);
-        if (isData) {
-            fragmentVideosBinding.network.setVisibility(View.GONE);
-            fragmentVideosBinding.rvVideos.setVisibility(View.VISIBLE);
+        fragmentVideosBinding.rvVideos.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Objects.requireNonNull(getActivity()).unregisterReceiver(mReceiver);
+    }
+
+    public static void setVideosConnection(Boolean connection) {
+        connectionListener.connection(connection);
+    }
+
+    @Override
+    public void connection(Boolean connection) {
+        if (connection) {
+            fragmentVideosBinding.message.setText(R.string.videos_empty);
         } else {
-            fragmentVideosBinding.rvVideos.setVisibility(View.GONE);
-            fragmentVideosBinding.network.setVisibility(View.VISIBLE);
+            fragmentVideosBinding.message.setText(R.string.videos_connection);
         }
     }
 }

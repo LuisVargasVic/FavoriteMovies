@@ -4,6 +4,7 @@
     package="com.udacity.luisev96.popularmovies">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="false"
@@ -24,6 +25,21 @@
         <activity
             android:name=".presentation.video.VideoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
+        <receiver android:name=".remote.receivers.MoviesReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".remote.receivers.ReviewsReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".remote.receivers.VideosReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

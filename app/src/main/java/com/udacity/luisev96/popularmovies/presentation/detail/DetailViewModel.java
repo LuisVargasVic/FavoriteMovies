@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.udacity.luisev96.popularmovies.data.MoviesRepository;
 import com.udacity.luisev96.popularmovies.database.MoviesDatabase;
 import com.udacity.luisev96.popularmovies.domain.Movie;
-import com.udacity.luisev96.popularmovies.remote.RemoteListener;
+import com.udacity.luisev96.popularmovies.remote.listeners.RemoteListener;
 
 /**
  * Created by Luis Vargas on 2019-08-25.

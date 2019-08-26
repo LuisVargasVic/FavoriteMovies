@@ -12,11 +12,11 @@ import com.udacity.luisev96.popularmovies.database.MoviesDatabase;
 import com.udacity.luisev96.popularmovies.domain.Movie;
 import com.udacity.luisev96.popularmovies.domain.Review;
 import com.udacity.luisev96.popularmovies.domain.Video;
-import com.udacity.luisev96.popularmovies.remote.FavMovieTask;
-import com.udacity.luisev96.popularmovies.remote.MoviesTask;
-import com.udacity.luisev96.popularmovies.remote.RemoteListener;
-import com.udacity.luisev96.popularmovies.remote.ReviewsTask;
-import com.udacity.luisev96.popularmovies.remote.VideosTask;
+import com.udacity.luisev96.popularmovies.remote.tasks.FavMovieTask;
+import com.udacity.luisev96.popularmovies.remote.tasks.MoviesTask;
+import com.udacity.luisev96.popularmovies.remote.listeners.RemoteListener;
+import com.udacity.luisev96.popularmovies.remote.tasks.ReviewsTask;
+import com.udacity.luisev96.popularmovies.remote.tasks.VideosTask;
 
 import java.net.MalformedURLException;
 import java.net.URL;
